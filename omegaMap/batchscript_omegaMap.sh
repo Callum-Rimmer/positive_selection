@@ -5,7 +5,7 @@
 #SBATCH --time=20-12:0:0
 #SBATCH --mail-user=callum.rimmer@ntu.ac.uk
 #SBATCH --mail-type=ALL
-#SBATCH --output=/users/bio3rimmec/job_logs/oM_%j.log
+#SBATCH --output=/users/xxxxx/job_logs/oM_%j.log
 
 # This script outputs some useful information so we can see what parallel
 # and srun are doing.
@@ -18,6 +18,8 @@ filename=$(basename $input)
 echo "File:" $filename
 gene=$(echo $filename | sed 's|.fas||')
 echo "Gene:" $gene
+
+# Extract codon frequencies from PAML model 8 output file
 codon_freq=$(grep -A 16 'Codon frequencies' ./100_strain_dataset/paml_outfiles/${gene}_8.out | tail -n 16 | sed "s/[[:space:]]\+/ /g" | sed "s/^[[:space:]]\+//g" | tr "\n" "," | sed "s| |,|g" | sed "s|,0|,|g" | sed "s|0.|.|" | cut -f 11,12,15 -d',' --complement | rev | sed "s|,||" | rev)
 sample_size=$(dirname $input | cut -f9 -d'_')
 
